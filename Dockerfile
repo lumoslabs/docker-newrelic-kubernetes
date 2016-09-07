@@ -5,5 +5,5 @@ ENV TINI_VERSION=v0.10.0 CONFIG_PATH=/data/newrelic/config
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
 ADD container-run /sbin/
 RUN chmod +x /sbin/tini /sbin/container-run
-ENTRYPOINT ["/bin/tini", "--"]
+ENTRYPOINT ["/sbin/tini", "-g", "--"]
 CMD ["/sbin/container-run"]

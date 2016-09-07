@@ -1,9 +1,13 @@
 #!/bin/bash
-set -a
-: ${CONFIG_PATH:=/data/newrelic/config}
+pid=
+trap '[[ $pid ]] && kill $pid' EXIT
+
 until [[ -r "${CONFIG_PATH}" ]]; do
   printf "[%s] ERROR: Config at '%s' not readable\n" "$(date -Is)" "${CONFIG_PATH}"
-  sleep 20
+  sleep 20 & pid=$!
+  wait
+  pid=
 done
-source "${CONFIG_PATH}"
+
+set -a ; source "${CONFIG_PATH}" ; set +a
 exec /usr/sbin/nrsysmond -E -F
