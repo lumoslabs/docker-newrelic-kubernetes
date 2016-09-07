@@ -1,0 +1,9 @@
+#!/bin/bash
+set -a
+: ${CONFIG_PATH:=/data/newrelic/config}
+until [[ -r "${CONFIG_PATH}" ]]; do
+  printf "[%s] ERROR: Config at '%s' not readable\n" "$(date -Is)" "${CONFIG_PATH}"
+  sleep 20
+done
+source "${CONFIG_PATH}"
+exec /usr/sbin/nrsysmond -E -F
